@@ -18,6 +18,6 @@ public class IsHtmlMatcherTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void rejectsMissingSubMatcher() {
-		assertThat("<b>Hello World</b>", isHtmlMatching());
+		assertThat("<b>Hello World</b>", isHtmlMatching(null));
 	}
 }

@@ -1,10 +1,5 @@
 package net.seibermedia.jsouphamcrest;
 
-import static java.util.Collections.emptyList;
-
-import java.util.Arrays;
-import java.util.List;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
@@ -13,20 +8,19 @@ import org.jsoup.select.Elements;
 
 public class HasElementMatcher extends TypeSafeDiagnosingMatcher<Element> {
 	private final String selector;
-	private final List<Matcher<Element>> additionalMatcher;
+	private final Matcher<Element> additionalMatcher;
 
-	private HasElementMatcher(String selector, List<Matcher<Element>> additionalMatcher) {
+	private HasElementMatcher(String selector, Matcher<Element> additionalMatcher) {
 		this.selector = selector;
 		this.additionalMatcher = additionalMatcher;
 	}
 
 	public static HasElementMatcher hasElement(String selector) {
-		return new HasElementMatcher(selector, emptyList());
+		return new HasElementMatcher(selector, null);
 	}
 
-	@SafeVarargs
-	public static HasElementMatcher hasElement(String selector, Matcher<Element>... additionalMatcher) {
-		return new HasElementMatcher(selector, Arrays.asList(additionalMatcher));
+	public static HasElementMatcher hasElement(String selector, Matcher<Element> additionalMatcher) {
+		return new HasElementMatcher(selector, additionalMatcher);
 	}
 
 	protected boolean matchesSafely(Element element, Description mismatchDescription) {
@@ -47,15 +41,24 @@ public class HasElementMatcher extends TypeSafeDiagnosingMatcher<Element> {
 			return false;
 		}
 
-		mismatchDescription
-				.appendText("did have an element");
+		Element matchingElement = elements.get(0);
+		if (additionalMatcher != null && !additionalMatcher.matches(matchingElement)) {
+			mismatchDescription.appendText("did have an element that");
+			additionalMatcher.describeMismatch(matchingElement, mismatchDescription);
+			return false;
+		}
 
-		Element foundElement = elements.get(0);
-		return AdditionalMatcherDescriber.assertAndDescribeAdditionalMatcher(foundElement, additionalMatcher, mismatchDescription);
+		return true;
 	}
 
 	public void describeTo(Description description) {
-		description.appendText("has an element matching ").appendValue(this.selector);
-		AdditionalMatcherDescriber.describeAdditionalMatcher(additionalMatcher, description);
+		description
+				.appendText("has an element matching ")
+				.appendValue(this.selector);
+
+		if (additionalMatcher != null) {
+			description.appendText(" that ")
+					.appendDescriptionOf(additionalMatcher);
+		}
 	}
 }

@@ -3,6 +3,7 @@ package net.seibermedia.jsouphamcrest;
 import static net.seibermedia.jsouphamcrest.HasElementsMatcher.hasElements;
 import static net.seibermedia.jsouphamcrest.IsHtmlMatcher.isHtmlMatching;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
@@ -92,10 +93,10 @@ public class HasElementsMatcherTest {
 	public void describesMultipleMismatchesCorrectly() {
 		String html = "<div><b>Hello World</b></div>";
 
-		IsHtmlMatcher matcher = isHtmlMatching(
+		IsHtmlMatcher matcher = isHtmlMatching(allOf(
 				hasElements("i"),
 				hasElements("a")
-		);
+		));
 		StringDescription expectedDescription = new StringDescription();
 		matcher.describeTo(expectedDescription);
 
@@ -103,23 +104,21 @@ public class HasElementsMatcherTest {
 		boolean matches = matcher.matchesSafely(html, mismatchDescription);
 
 		assertThat(matches, is(false));
-		assertThat(expectedDescription.toString(), is("a parsable HTML-Document " +
-				"that has elements matching \"i\" " +
-				"and has elements matching \"a\""));
+		assertThat(expectedDescription.toString(), is("a parsable HTML-Document that " +
+				"(has elements matching \"i\" and has elements matching \"a\")"));
 
 		assertThat(mismatchDescription.toString(), is("a parsable HTML-Document " +
-				"that did not have elements matching \"i\" " +
-				"and did not have elements matching \"a\""));
+				"that has elements matching \"i\" did not have elements matching \"i\""));
 	}
 
 	@Test
 	public void describesPartialMismatchesCorrectly() {
 		String html = "<div><b>Hello World</b></div>";
 
-		IsHtmlMatcher matcher = isHtmlMatching(
+		IsHtmlMatcher matcher = isHtmlMatching(allOf(
 				hasElements("i"),
 				hasElements("b")
-		);
+		));
 		StringDescription expectedDescription = new StringDescription();
 		matcher.describeTo(expectedDescription);
 
@@ -127,12 +126,11 @@ public class HasElementsMatcherTest {
 		boolean matches = matcher.matchesSafely(html, mismatchDescription);
 
 		assertThat(matches, is(false));
-		assertThat(expectedDescription.toString(), is("a parsable HTML-Document " +
-				"that has elements matching \"i\" " +
-				"and has elements matching \"b\""));
+		assertThat(expectedDescription.toString(), is("a parsable HTML-Document that " +
+				"(has elements matching \"i\" and has elements matching \"b\")"));
 
 		assertThat(mismatchDescription.toString(), is("a parsable HTML-Document " +
-				"that did not have elements matching \"i\""));
+				"that has elements matching \"i\" did not have elements matching \"i\""));
 	}
 
 	@Test
