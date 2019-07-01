@@ -1,7 +1,5 @@
 package net.seibermedia.jsouphamcrest;
 
-import java.util.Collection;
-
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
@@ -10,9 +8,9 @@ import org.jsoup.select.Elements;
 
 public class HasElementsMatcher extends TypeSafeDiagnosingMatcher<Element> {
 	private final String selector;
-	private final Matcher<Collection<? extends Element>> additionalMatcher;
+	private final Matcher<? extends Iterable<? extends Element>> additionalMatcher;
 
-	private HasElementsMatcher(String selector, Matcher<Collection<? extends Element>> additionalMatcher) {
+	private HasElementsMatcher(String selector, Matcher<? extends Iterable<? extends Element>> additionalMatcher) {
 		this.selector = selector;
 		this.additionalMatcher = additionalMatcher;
 	}
@@ -21,7 +19,7 @@ public class HasElementsMatcher extends TypeSafeDiagnosingMatcher<Element> {
 		return new HasElementsMatcher(selector, null);
 	}
 
-	public static HasElementsMatcher hasElements(String selector, Matcher<Collection<? extends Element>> additionalMatcher) {
+	public static HasElementsMatcher hasElements(String selector, Matcher<? extends Iterable<? extends Element>> additionalMatcher) {
 		return new HasElementsMatcher(selector, additionalMatcher);
 	}
 

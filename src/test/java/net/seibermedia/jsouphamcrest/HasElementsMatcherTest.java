@@ -1,9 +1,11 @@
 package net.seibermedia.jsouphamcrest;
 
 import static net.seibermedia.jsouphamcrest.HasElementsMatcher.hasElements;
+import static net.seibermedia.jsouphamcrest.HasTextContentMatcher.hasTextContent;
 import static net.seibermedia.jsouphamcrest.IsHtmlMatcher.isHtmlMatching;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
@@ -21,20 +23,6 @@ public class HasElementsMatcherTest {
 	public void rejectsTagSelector() {
 		String html = "<div><b>Hello World</b></div>";
 		assertThat(html, isHtmlMatching(hasElements("a")));
-	}
-
-	// TODO evaluates sub matcher
-
-	@Test
-	public void matchesMultipleElements() {
-		String html = "<div><b>Hello</b> <b>World</b></div>";
-		assertThat(html, isHtmlMatching(hasElements("b", hasSize(2))));
-	}
-
-	@Test(expected = AssertionError.class)
-	public void evaluatedMultipleElementsSubMatcher() {
-		String html = "<div><b>Hello</b> <b>World</b></div>";
-		assertThat(html, isHtmlMatching(hasElements("b", hasSize(3))));
 	}
 
 	@Test
@@ -71,6 +59,36 @@ public class HasElementsMatcherTest {
 	public void rejectsClassSelector() {
 		String html = "<div><b class='not so bold'><i>Hello World</i></b></div>";
 		assertThat(html, isHtmlMatching(hasElements("div b.very.bold")));
+	}
+
+	@Test
+	public void matchesMultipleSubSelectors() {
+		String html = "<div><b>Hello</b> <b>World</b></div>";
+		assertThat(html, isHtmlMatching(hasElements("b", contains(
+				hasTextContent("Hello"),
+				hasTextContent("World")
+		))));
+	}
+
+	@Test(expected = AssertionError.class)
+	public void rejectsMultipleSubSelectors() {
+		String html = "<div><b>Hello</b> <b>World</b></div>";
+		assertThat(html, isHtmlMatching(hasElements("b", contains(
+				hasTextContent("World"),
+				hasTextContent("Hello")
+		))));
+	}
+
+	@Test
+	public void matchesMultipleElements() {
+		String html = "<div><b>Hello</b> <b>World</b></div>";
+		assertThat(html, isHtmlMatching(hasElements("b", hasSize(2))));
+	}
+
+	@Test(expected = AssertionError.class)
+	public void evaluatedMultipleElementsSubMatcher() {
+		String html = "<div><b>Hello</b> <b>World</b></div>";
+		assertThat(html, isHtmlMatching(hasElements("b", hasSize(3))));
 	}
 
 	@Test
@@ -152,5 +170,4 @@ public class HasElementsMatcherTest {
 		assertThat(mismatchDescription.toString(), is("a parsable HTML-Document that did have elements that " +
 				"collection size was <2>"));
 	}
-
 }

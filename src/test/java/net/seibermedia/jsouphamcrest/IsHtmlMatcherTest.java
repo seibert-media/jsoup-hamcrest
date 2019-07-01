@@ -16,7 +16,7 @@ public class IsHtmlMatcherTest {
 		));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = NullPointerException.class)
 	public void rejectsMissingSubMatcher() {
 		assertThat("<b>Hello World</b>", isHtmlMatching(null));
 	}

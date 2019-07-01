@@ -1,5 +1,7 @@
 package net.seibermedia.jsouphamcrest;
 
+import static java.util.Objects.requireNonNull;
+
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
@@ -11,11 +13,7 @@ public class IsHtmlMatcher extends TypeSafeDiagnosingMatcher<String> {
 	private final Matcher<Element> additionalMatcher;
 
 	private IsHtmlMatcher(Matcher<Element> additionalMatcher) {
-		if (additionalMatcher == null) {
-			throw new IllegalArgumentException("IsHtmlMatcher must at a successive matcher.");
-		}
-
-		this.additionalMatcher = additionalMatcher;
+		this.additionalMatcher = requireNonNull(additionalMatcher);
 	}
 
 	public static IsHtmlMatcher isHtmlMatching(Matcher<Element> additionalMatcher) {

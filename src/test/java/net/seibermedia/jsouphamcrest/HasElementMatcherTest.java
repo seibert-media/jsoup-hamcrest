@@ -1,6 +1,7 @@
 package net.seibermedia.jsouphamcrest;
 
 import static net.seibermedia.jsouphamcrest.HasElementMatcher.hasElement;
+import static net.seibermedia.jsouphamcrest.HasTextContentMatcher.hasTextContent;
 import static net.seibermedia.jsouphamcrest.IsHtmlMatcher.isHtmlMatching;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
@@ -62,6 +63,18 @@ public class HasElementMatcherTest {
 	public void rejectsClassSelector() {
 		String html = "<div><b class='not so bold'><i>Hello World</i></b></div>";
 		assertThat(html, isHtmlMatching(hasElement("div b.very.bold")));
+	}
+
+	@Test
+	public void acceptsSubMatcher() {
+		String html = "<div><b>Hello</b></div>";
+		assertThat(html, isHtmlMatching(hasElement("b", hasTextContent("Hello"))));
+	}
+
+	@Test(expected = AssertionError.class)
+	public void evaluatesSubMatcher() {
+		String html = "<div><b>Hello</b></div>";
+		assertThat(html, isHtmlMatching(hasElement("b", hasTextContent("World"))));
 	}
 
 	@Test
