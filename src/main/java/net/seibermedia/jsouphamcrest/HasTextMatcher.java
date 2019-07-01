@@ -8,19 +8,19 @@ import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.jsoup.nodes.Element;
 
-public class HasTextContentMatcher extends TypeSafeDiagnosingMatcher<Element> {
-	private Matcher<String> textContentMatcher;
+public class HasTextMatcher extends TypeSafeDiagnosingMatcher<Element> {
+	private final Matcher<String> textContentMatcher;
 
-	private HasTextContentMatcher(Matcher<String> textContentMatcher) {
+	private HasTextMatcher(Matcher<String> textContentMatcher) {
 		this.textContentMatcher = requireNonNull(textContentMatcher);
 	}
 
-	public static HasTextContentMatcher hasTextContent(String exactContent) {
-		return new HasTextContentMatcher(Matchers.equalTo(exactContent));
+	public static HasTextMatcher hasText(String exactContent) {
+		return new HasTextMatcher(Matchers.equalTo(exactContent));
 	}
 
-	public static HasTextContentMatcher hasTextContent(Matcher<String> textContentMatcher) {
-		return new HasTextContentMatcher(textContentMatcher);
+	public static HasTextMatcher hasText(Matcher<String> textContentMatcher) {
+		return new HasTextMatcher(textContentMatcher);
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package net.seibermedia.jsouphamcrest;
 
 import static net.seibermedia.jsouphamcrest.HasElementsMatcher.hasElements;
-import static net.seibermedia.jsouphamcrest.HasTextContentMatcher.hasTextContent;
+import static net.seibermedia.jsouphamcrest.HasTextMatcher.hasText;
 import static net.seibermedia.jsouphamcrest.IsHtmlMatcher.isHtmlMatching;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
@@ -65,8 +65,8 @@ public class HasElementsMatcherTest {
 	public void matchesMultipleSubSelectors() {
 		String html = "<div><b>Hello</b> <b>World</b></div>";
 		assertThat(html, isHtmlMatching(hasElements("b", contains(
-				hasTextContent("Hello"),
-				hasTextContent("World")
+				hasText("Hello"),
+				hasText("World")
 		))));
 	}
 
@@ -74,8 +74,8 @@ public class HasElementsMatcherTest {
 	public void rejectsMultipleSubSelectors() {
 		String html = "<div><b>Hello</b> <b>World</b></div>";
 		assertThat(html, isHtmlMatching(hasElements("b", contains(
-				hasTextContent("World"),
-				hasTextContent("Hello")
+				hasText("World"),
+				hasText("Hello")
 		))));
 	}
 

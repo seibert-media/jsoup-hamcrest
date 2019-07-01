@@ -1,7 +1,7 @@
 package net.seibermedia.jsouphamcrest;
 
 import static net.seibermedia.jsouphamcrest.HasElementMatcher.hasElement;
-import static net.seibermedia.jsouphamcrest.HasTextContentMatcher.hasTextContent;
+import static net.seibermedia.jsouphamcrest.HasTextMatcher.hasText;
 import static net.seibermedia.jsouphamcrest.IsHtmlMatcher.isHtmlMatching;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
@@ -68,13 +68,13 @@ public class HasElementMatcherTest {
 	@Test
 	public void acceptsSubMatcher() {
 		String html = "<div><b>Hello</b></div>";
-		assertThat(html, isHtmlMatching(hasElement("b", hasTextContent("Hello"))));
+		assertThat(html, isHtmlMatching(hasElement("b", hasText("Hello"))));
 	}
 
 	@Test(expected = AssertionError.class)
 	public void evaluatesSubMatcher() {
 		String html = "<div><b>Hello</b></div>";
-		assertThat(html, isHtmlMatching(hasElement("b", hasTextContent("World"))));
+		assertThat(html, isHtmlMatching(hasElement("b", hasText("World"))));
 	}
 
 	@Test
