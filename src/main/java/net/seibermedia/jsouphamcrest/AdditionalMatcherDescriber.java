@@ -5,14 +5,13 @@ import java.util.stream.Collectors;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.jsoup.nodes.Element;
 
 class AdditionalMatcherDescriber {
-	static void describeAdditionalMatcher(List<Matcher<Element>> additionalMatcher, Description description) {
+	static void describeAdditionalMatcher(List<? extends Matcher<?>> additionalMatcher, Description description) {
 		if (additionalMatcher.size() > 0) {
 			description.appendText(" that ");
 			for (int i = 0, length = additionalMatcher.size(); i < length; i++) {
-				Matcher<Element> elementMatcher = additionalMatcher.get(i);
+				Matcher elementMatcher = additionalMatcher.get(i);
 				description.appendDescriptionOf(elementMatcher);
 				if (i < length - 1) {
 					description.appendText(" and ");
@@ -21,12 +20,12 @@ class AdditionalMatcherDescriber {
 		}
 	}
 
-	static boolean assertAndDescribeAdditionalMatcher(
-			Element element,
-			List<Matcher<Element>> additionalMatcher,
+	static <T> boolean assertAndDescribeAdditionalMatcher(
+			T element,
+			List<? extends Matcher<T>> additionalMatcher,
 			Description mismatchDescription
 	) {
-		List<Matcher<Element>> mismatchingMatchers = additionalMatcher.stream().filter(
+		List<Matcher> mismatchingMatchers = additionalMatcher.stream().filter(
 				elementMatcher -> !elementMatcher.matches(element)
 		).collect(Collectors.toList());
 
@@ -36,7 +35,7 @@ class AdditionalMatcherDescriber {
 
 		mismatchDescription.appendText(" that ");
 		for (int i = 0, length = mismatchingMatchers.size(); i < length; i++) {
-			Matcher<Element> elementMatcher = additionalMatcher.get(i);
+			Matcher elementMatcher = additionalMatcher.get(i);
 
 			elementMatcher.describeMismatch(element, mismatchDescription);
 			if (i < length - 1) {
