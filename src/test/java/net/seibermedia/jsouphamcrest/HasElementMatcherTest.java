@@ -23,6 +23,18 @@ public class HasElementMatcherTest {
 		assertThat(html, isHtmlMatching(hasElement("a")));
 	}
 
+	@Test
+	public void matchesTextSelector() {
+		String html = "<div><b>Hello World</b></div>";
+		assertThat(html, isHtmlMatching(hasElement("b:contains(Hello World)")));
+	}
+
+	@Test(expected = AssertionError.class)
+	public void rejectsTextSelector() {
+		String html = "<div><b>Hello World</b></div>";
+		assertThat(html, isHtmlMatching(hasElement("b:contains(Bye World)")));
+	}
+
 	@Test(expected = AssertionError.class)
 	public void rejectsMultipleElements() {
 		String html = "<div><b>Hello</b> <b>World</b></div>";
