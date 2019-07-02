@@ -27,38 +27,21 @@ public class HasAttributeMatcher extends TypeSafeDiagnosingMatcher<Element> {
 		return new HasAttributeMatcher(name, valueMatcher);
 	}
 
-	public static HasAttributeMatcher hasHref(String exactHref) {
-		return new HasAttributeMatcher("href", Matchers.equalTo(exactHref));
-	}
-
-	public static HasAttributeMatcher hasHref(Matcher<String> valueMatcher) {
-		return new HasAttributeMatcher("href", valueMatcher);
-	}
-
-	public static HasAttributeMatcher hasData(String dataAttribute) {
-		return new HasAttributeMatcher("data-" + dataAttribute, null);
-	}
-
-	public static HasAttributeMatcher hasData(String dataAttribute, String exactValue) {
-		return new HasAttributeMatcher("data-" + dataAttribute, Matchers.equalTo(exactValue));
-	}
-
-	public static HasAttributeMatcher hasData(String dataAttribute, Matcher<String> valueMatcher) {
-		return new HasAttributeMatcher("data-" + dataAttribute, valueMatcher);
-	}
-
 	@Override
 	protected boolean matchesSafely(Element item, Description mismatchDescription) {
 		boolean hasAttribute = item.attributes().hasKeyIgnoreCase(name);
 		if (!hasAttribute) {
-			mismatchDescription.appendText("does not have attribute");
+			mismatchDescription
+					.appendText("did not have an attribute ")
+					.appendValue(name);
+
 			return false;
 		}
 
 		if (valueMatcher != null) {
 			String attributeValue = item.attributes().getIgnoreCase(name);
 			if (!valueMatcher.matches(attributeValue)) {
-				mismatchDescription.appendText("does have attribute that is ");
+				mismatchDescription.appendText("did have an attribute ").appendValue(name).appendText(" that ");
 				valueMatcher.describeMismatch(attributeValue, mismatchDescription);
 				return false;
 			}

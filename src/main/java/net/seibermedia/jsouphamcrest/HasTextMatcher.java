@@ -29,6 +29,7 @@ public class HasTextMatcher extends TypeSafeDiagnosingMatcher<Element> {
 		boolean matches = textContentMatcher.matches(itemText);
 
 		if (!matches) {
+			mismatchDescription.appendText("has text-content that ");
 			textContentMatcher.describeMismatch(itemText, mismatchDescription);
 		}
 
@@ -38,7 +39,7 @@ public class HasTextMatcher extends TypeSafeDiagnosingMatcher<Element> {
 	@Override
 	public void describeTo(Description description) {
 		description
-				.appendText("Has Text-Content that is ")
+				.appendText("has text-content that is ")
 				.appendDescriptionOf(textContentMatcher);
 	}
 }

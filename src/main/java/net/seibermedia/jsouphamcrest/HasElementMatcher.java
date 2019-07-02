@@ -43,7 +43,11 @@ public class HasElementMatcher extends TypeSafeDiagnosingMatcher<Element> {
 
 		Element matchingElement = elements.get(0);
 		if (additionalMatcher != null && !additionalMatcher.matches(matchingElement)) {
-			mismatchDescription.appendText("did have an element that");
+			mismatchDescription
+					.appendText("did have an element matching ")
+					.appendValue(selector)
+					.appendText(" that ");
+
 			additionalMatcher.describeMismatch(matchingElement, mismatchDescription);
 			return false;
 		}
