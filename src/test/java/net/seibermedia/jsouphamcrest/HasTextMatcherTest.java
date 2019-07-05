@@ -1,6 +1,7 @@
 package net.seibermedia.jsouphamcrest;
 
 import static net.seibermedia.jsouphamcrest.HasElementMatcher.hasElement;
+import static net.seibermedia.jsouphamcrest.HasTextMatcher.hasOwnText;
 import static net.seibermedia.jsouphamcrest.HasTextMatcher.hasText;
 import static net.seibermedia.jsouphamcrest.IsHtmlMatcher.isHtmlMatching;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -45,6 +46,19 @@ public class HasTextMatcherTest {
 	public void rejectsSubMatcher() {
 		String html = "<b>HELLO</b>";
 		assertThat(html, isHtmlMatching(hasElement("b", hasText(equalToIgnoringCase("world")))));
+	}
+
+	@Test
+	public void matchesSubElementsText() {
+		String html = "<b>Hello <i>beautiful</i> World</b>";
+		assertThat(html, isHtmlMatching(hasElement("b", hasText("Hello beautiful World"))));
+	}
+
+	@Test
+	public void matchesOwnText() {
+		String html = "<b>Hello <i>beautiful</i> World</b>";
+		assertThat(html, isHtmlMatching(hasElement("b", hasOwnText("Hello World"))));
+		assertThat(html, isHtmlMatching(hasElement("i", hasOwnText("beautiful"))));
 	}
 
 	@Test

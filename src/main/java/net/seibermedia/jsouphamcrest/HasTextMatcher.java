@@ -10,22 +10,32 @@ import org.jsoup.nodes.Element;
 
 public class HasTextMatcher extends TypeSafeDiagnosingMatcher<Element> {
 	private final Matcher<String> textContentMatcher;
+	private boolean own;
 
-	private HasTextMatcher(Matcher<String> textContentMatcher) {
+	private HasTextMatcher(Matcher<String> textContentMatcher, boolean own) {
 		this.textContentMatcher = requireNonNull(textContentMatcher);
+		this.own = own;
 	}
 
 	public static HasTextMatcher hasText(String exactContent) {
-		return new HasTextMatcher(Matchers.equalTo(exactContent));
+		return new HasTextMatcher(Matchers.equalTo(exactContent), false);
+	}
+
+	public static HasTextMatcher hasOwnText(String exactContent) {
+		return new HasTextMatcher(Matchers.equalTo(exactContent), true);
 	}
 
 	public static HasTextMatcher hasText(Matcher<String> textContentMatcher) {
-		return new HasTextMatcher(textContentMatcher);
+		return new HasTextMatcher(textContentMatcher, false);
+	}
+
+	public static HasTextMatcher hasOwnText(Matcher<String> textContentMatcher) {
+		return new HasTextMatcher(textContentMatcher, true);
 	}
 
 	@Override
 	protected boolean matchesSafely(Element item, Description mismatchDescription) {
-		String itemText = item.text();
+		String itemText = own ? item.ownText() : item.text();
 		boolean matches = textContentMatcher.matches(itemText);
 
 		if (!matches) {
