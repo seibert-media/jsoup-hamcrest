@@ -18,7 +18,7 @@ Add the following to your pom.xml:
 <dependency>
 	<groupId>com.github.seibert-media</groupId>
 	<artifactId>jsoup-hamcrest</artifactId>
-	<version>master-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<scope>test</scope>
 </dependency>
 ```
