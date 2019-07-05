@@ -3,11 +3,29 @@ This is a library of Hamcrest-compatible matchers that allow matching HTML-Strin
 It can be used to assert certain structural aspects of HTML Strings (Template-Outputs, HTML-Responses).
 
 ## Installation
-tbd.
+curtesy of [JitPack](https://jitpack.io/#seibert-media/jsoup-hamcrest/master-SNAPSHOT):
+Add the following to your pom.xml:
+```xml
+<repositories>
+	<repository>
+		<id>jitpack.io</id>
+		<url>https://jitpack.io</url>
+	</repository>
+</repositories>
+
+…
+
+<dependency>
+	<groupId>com.github.seibert-media</groupId>
+	<artifactId>jsoup-hamcrest</artifactId>
+	<version>master-SNAPSHOT</version>
+	<scope>test</scope>
+</dependency>
+```
 
 ## General Usage: Hamcrest
 ```java
-public class MyTest {
+public class MyJUnitTest {
 	@Test
 	public void hasBoldHelloWorld() {
 		String html = "<div><b>Hello World</b></div>";
@@ -17,7 +35,32 @@ public class MyTest {
 ```
 
 ## General Usage: RestAssured
-tbd.
+```java
+public class MyHamcrestRestIT {
+	@Test
+	public void hasExpectedHtmlResponse() {
+		given()
+			.log().all()
+			.and().accept(ContentType.HTML)
+		.when()
+			.get("htttp://localhost:8080/…")
+		.then()
+			.log().headers()
+			.contentType(ContentType.HTML)
+			.statusCode(200)
+			.body(isHtmlMatching(allOf(
+					// Test HTML-Title
+					hasElement("html head title", hasText(startsWith("MY Application"))),
+
+					// Test Main-Menu is correct
+					hasElement("#admin-nav-heading nav > ul li.selected a", allOf(
+						hasText("Expected Menu"),
+						hasAttribute("href", containsString("path/to/expected/page"))
+					))
+			)));
+	}
+}
+```
 
 ## IsHtmlMatcher
 This is the basic matcher that converts from a String, InputStream or a File to an JSoup Element that the other Matchers can work with.
