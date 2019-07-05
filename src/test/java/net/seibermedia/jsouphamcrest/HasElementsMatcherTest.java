@@ -112,7 +112,7 @@ public class HasElementsMatcherTest {
 		matcher.describeTo(expectedDescription);
 
 		StringDescription mismatchDescription = new StringDescription();
-		boolean matches = matcher.matchesSafely(html, mismatchDescription);
+		boolean matches = matcher.matches(html, mismatchDescription);
 
 		assertThat(matches, is(false));
 		assertThat(expectedDescription.toString(), is("a parsable HTML-Document that has elements matching \"i\""));
@@ -131,7 +131,7 @@ public class HasElementsMatcherTest {
 		matcher.describeTo(expectedDescription);
 
 		StringDescription mismatchDescription = new StringDescription();
-		boolean matches = matcher.matchesSafely(html, mismatchDescription);
+		boolean matches = matcher.matches(html, mismatchDescription);
 
 		assertThat(matches, is(false));
 		assertThat(expectedDescription.toString(), is("a parsable HTML-Document that " +
@@ -153,7 +153,7 @@ public class HasElementsMatcherTest {
 		matcher.describeTo(expectedDescription);
 
 		StringDescription mismatchDescription = new StringDescription();
-		boolean matches = matcher.matchesSafely(html, mismatchDescription);
+		boolean matches = matcher.matches(html, mismatchDescription);
 
 		assertThat(matches, is(false));
 		assertThat(expectedDescription.toString(), is("a parsable HTML-Document that " +
@@ -172,7 +172,7 @@ public class HasElementsMatcherTest {
 		matcher.describeTo(expectedDescription);
 
 		StringDescription mismatchDescription = new StringDescription();
-		boolean matches = matcher.matchesSafely(html, mismatchDescription);
+		boolean matches = matcher.matches(html, mismatchDescription);
 
 		assertThat(matches, is(false));
 		assertThat(expectedDescription.toString(), is("a parsable HTML-Document that " +

@@ -56,7 +56,7 @@ public class HasTextMatcherTest {
 		matcher.describeTo(expectedDescription);
 
 		StringDescription mismatchDescription = new StringDescription();
-		boolean matches = matcher.matchesSafely(html, mismatchDescription);
+		boolean matches = matcher.matches(html, mismatchDescription);
 
 		assertThat(matches, is(false));
 		assertThat(expectedDescription.toString(), is("a parsable HTML-Document that has an element matching \"span\" that " +
@@ -74,7 +74,7 @@ public class HasTextMatcherTest {
 		matcher.describeTo(expectedDescription);
 
 		StringDescription mismatchDescription = new StringDescription();
-		boolean matches = matcher.matchesSafely(html, mismatchDescription);
+		boolean matches = matcher.matches(html, mismatchDescription);
 
 		assertThat(matches, is(false));
 		assertThat(expectedDescription.toString(), is("a parsable HTML-Document that has an element matching \"span\" that " +

@@ -2,14 +2,19 @@ package net.seibermedia.jsouphamcrest;
 
 import static java.util.Objects.requireNonNull;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+
 import org.hamcrest.Description;
+import org.hamcrest.DiagnosingMatcher;
 import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
-public class IsHtmlMatcher extends TypeSafeDiagnosingMatcher<String> {
+public class IsHtmlMatcher extends DiagnosingMatcher<Object> {
+	public static final String CHARSET = "UTF-8";
 	private final Matcher<Element> additionalMatcher;
 
 	private IsHtmlMatcher(Matcher<Element> additionalMatcher) {
@@ -20,8 +25,22 @@ public class IsHtmlMatcher extends TypeSafeDiagnosingMatcher<String> {
 		return new IsHtmlMatcher(additionalMatcher);
 	}
 
-	protected boolean matchesSafely(String html, Description mismatchDescription) {
-		Document document = Jsoup.parse(html);
+	@Override
+	protected boolean matches(Object item, Description mismatchDescription) {
+		Document document;
+		try {
+			if (item instanceof String) {
+				document = Jsoup.parse((String) item);
+			} else if (item instanceof InputStream) {
+				document = Jsoup.parse((InputStream) item, CHARSET, "/");
+			} else if (item instanceof File) {
+				document = Jsoup.parse((File) item, CHARSET, "/");
+			} else {
+				throw new IllegalArgumentException(String.format("Unknown Docuement Data-Type: %s", item.getClass().toString()));
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 		mismatchDescription.appendText("a parsable HTML-Document");
 
 		if (!additionalMatcher.matches(document)) {
