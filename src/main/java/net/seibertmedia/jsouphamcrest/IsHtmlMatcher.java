@@ -1,4 +1,4 @@
-package net.seibermedia.jsouphamcrest;
+package net.seibertmedia.jsouphamcrest;
 
 import static java.util.Objects.requireNonNull;
 
@@ -14,7 +14,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class IsHtmlMatcher extends DiagnosingMatcher<Object> {
-	public static final String CHARSET = "UTF-8";
+	private static final String CHARSET = "UTF-8";
 	private final Matcher<Element> additionalMatcher;
 
 	private IsHtmlMatcher(Matcher<Element> additionalMatcher) {

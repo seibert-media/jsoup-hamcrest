@@ -1,4 +1,4 @@
-package net.seibermedia.jsouphamcrest;
+package net.seibertmedia.jsouphamcrest;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;

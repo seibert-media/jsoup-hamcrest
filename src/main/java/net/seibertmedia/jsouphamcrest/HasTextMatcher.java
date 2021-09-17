@@ -1,4 +1,4 @@
-package net.seibermedia.jsouphamcrest;
+package net.seibertmedia.jsouphamcrest;
 
 import static java.util.Objects.requireNonNull;
 
@@ -10,7 +10,7 @@ import org.jsoup.nodes.Element;
 
 public class HasTextMatcher extends TypeSafeDiagnosingMatcher<Element> {
 	private final Matcher<String> textContentMatcher;
-	private boolean own;
+	private final boolean own;
 
 	private HasTextMatcher(Matcher<String> textContentMatcher, boolean own) {
 		this.textContentMatcher = requireNonNull(textContentMatcher);

@@ -1,113 +1,99 @@
-package net.seibermedia.jsouphamcrest;
+package net.seibertmedia.jsouphamcrest;
 
-import static net.seibermedia.jsouphamcrest.HasElementsMatcher.hasElements;
-import static net.seibermedia.jsouphamcrest.HasTextMatcher.hasText;
-import static net.seibermedia.jsouphamcrest.IsHtmlMatcher.isHtmlMatching;
+import static net.seibertmedia.jsouphamcrest.HasElementMatcher.hasElement;
+import static net.seibertmedia.jsouphamcrest.HasTextMatcher.hasText;
+import static net.seibertmedia.jsouphamcrest.IsHtmlMatcher.isHtmlMatching;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
 import org.hamcrest.StringDescription;
 import org.junit.Test;
 
-public class HasElementsMatcherTest {
+public class HasElementMatcherTest {
 	@Test
 	public void matchesTagSelector() {
 		String html = "<div><b>Hello World</b></div>";
-		assertThat(html, isHtmlMatching(hasElements("b")));
+		assertThat(html, isHtmlMatching(hasElement("b")));
 	}
 
 	@Test(expected = AssertionError.class)
 	public void rejectsTagSelector() {
 		String html = "<div><b>Hello World</b></div>";
-		assertThat(html, isHtmlMatching(hasElements("a")));
+		assertThat(html, isHtmlMatching(hasElement("a")));
 	}
 
 	@Test
 	public void matchesTextSelector() {
 		String html = "<div><b>Hello World</b></div>";
-		assertThat(html, isHtmlMatching(hasElements("b:contains(Hello World)")));
+		assertThat(html, isHtmlMatching(hasElement("b:contains(Hello World)")));
 	}
 
 	@Test(expected = AssertionError.class)
 	public void rejectsTextSelector() {
 		String html = "<div><b>Hello World</b></div>";
-		assertThat(html, isHtmlMatching(hasElements("b:contains(Bye World)")));
+		assertThat(html, isHtmlMatching(hasElement("b:contains(Bye World)")));
+	}
+
+	@Test(expected = AssertionError.class)
+	public void rejectsMultipleElements() {
+		String html = "<div><b>Hello</b> <b>World</b></div>";
+		assertThat(html, isHtmlMatching(hasElement("b")));
 	}
 
 	@Test
 	public void matchesDeepSelector() {
 		String html = "<div><b><i>Hello World</i></b></div>";
-		assertThat(html, isHtmlMatching(hasElements("div > b > i")));
+		assertThat(html, isHtmlMatching(hasElement("div > b > i")));
 	}
 
 	@Test(expected = AssertionError.class)
 	public void rejectsDeepSelector() {
 		String html = "<div><b><i>Hello World</i></b></div>";
-		assertThat(html, isHtmlMatching(hasElements("div > a > i")));
+		assertThat(html, isHtmlMatching(hasElement("div > a > i")));
 	}
 
 	@Test
 	public void matchesIdSelector() {
 		String html = "<div><b id='thebold'><i>Hello World</i></b></div>";
-		assertThat(html, isHtmlMatching(hasElements("div #thebold")));
+		assertThat(html, isHtmlMatching(hasElement("div #thebold")));
 	}
 
 	@Test(expected = AssertionError.class)
 	public void rejectsIdSelector() {
 		String html = "<div><b id='thebold'><i>Hello World</i></b></div>";
-		assertThat(html, isHtmlMatching(hasElements("div #thewild")));
+		assertThat(html, isHtmlMatching(hasElement("div #thewild")));
 	}
 
 	@Test
 	public void matchesClassSelector() {
 		String html = "<div><b class='not so bold'><i>Hello World</i></b></div>";
-		assertThat(html, isHtmlMatching(hasElements("div b.bold")));
+		assertThat(html, isHtmlMatching(hasElement("div b.bold")));
 	}
 
 	@Test(expected = AssertionError.class)
 	public void rejectsClassSelector() {
 		String html = "<div><b class='not so bold'><i>Hello World</i></b></div>";
-		assertThat(html, isHtmlMatching(hasElements("div b.very.bold")));
+		assertThat(html, isHtmlMatching(hasElement("div b.very.bold")));
 	}
 
 	@Test
-	public void matchesMultipleSubSelectors() {
-		String html = "<div><b>Hello</b> <b>World</b></div>";
-		assertThat(html, isHtmlMatching(hasElements("b", contains(
-				hasText("Hello"),
-				hasText("World")
-		))));
+	public void acceptsSubMatcher() {
+		String html = "<div><b>Hello</b></div>";
+		assertThat(html, isHtmlMatching(hasElement("b", hasText("Hello"))));
 	}
 
 	@Test(expected = AssertionError.class)
-	public void rejectsMultipleSubSelectors() {
-		String html = "<div><b>Hello</b> <b>World</b></div>";
-		assertThat(html, isHtmlMatching(hasElements("b", contains(
-				hasText("World"),
-				hasText("Hello")
-		))));
-	}
-
-	@Test
-	public void matchesMultipleElements() {
-		String html = "<div><b>Hello</b> <b>World</b></div>";
-		assertThat(html, isHtmlMatching(hasElements("b", hasSize(2))));
-	}
-
-	@Test(expected = AssertionError.class)
-	public void evaluatedMultipleElementsSubMatcher() {
-		String html = "<div><b>Hello</b> <b>World</b></div>";
-		assertThat(html, isHtmlMatching(hasElements("b", hasSize(3))));
+	public void evaluatesSubMatcher() {
+		String html = "<div><b>Hello</b></div>";
+		assertThat(html, isHtmlMatching(hasElement("b", hasText("World"))));
 	}
 
 	@Test
 	public void describesCorrectly() {
 		String html = "<div><b>Hello World</b></div>";
 
-		IsHtmlMatcher matcher = isHtmlMatching(hasElements("i"));
+		IsHtmlMatcher matcher = isHtmlMatching(hasElement("i"));
 		StringDescription expectedDescription = new StringDescription();
 		matcher.describeTo(expectedDescription);
 
@@ -115,8 +101,8 @@ public class HasElementsMatcherTest {
 		boolean matches = matcher.matches(html, mismatchDescription);
 
 		assertThat(matches, is(false));
-		assertThat(expectedDescription.toString(), is("a parsable HTML-Document that has elements matching \"i\""));
-		assertThat(mismatchDescription.toString(), is("a parsable HTML-Document that did not have elements matching \"i\""));
+		assertThat(expectedDescription.toString(), is("a parsable HTML-Document that has an element matching \"i\""));
+		assertThat(mismatchDescription.toString(), is("a parsable HTML-Document that did not have an element matching \"i\""));
 	}
 
 	@Test
@@ -124,8 +110,8 @@ public class HasElementsMatcherTest {
 		String html = "<div><b>Hello World</b></div>";
 
 		IsHtmlMatcher matcher = isHtmlMatching(allOf(
-				hasElements("i"),
-				hasElements("a")
+				hasElement("i"),
+				hasElement("a")
 		));
 		StringDescription expectedDescription = new StringDescription();
 		matcher.describeTo(expectedDescription);
@@ -135,10 +121,10 @@ public class HasElementsMatcherTest {
 
 		assertThat(matches, is(false));
 		assertThat(expectedDescription.toString(), is("a parsable HTML-Document that " +
-				"(has elements matching \"i\" and has elements matching \"a\")"));
+				"(has an element matching \"i\" and has an element matching \"a\")"));
 
-		assertThat(mismatchDescription.toString(), is("a parsable HTML-Document " +
-				"that has elements matching \"i\" did not have elements matching \"i\""));
+		assertThat(mismatchDescription.toString(), is("a parsable HTML-Document that " +
+				"has an element matching \"i\" did not have an element matching \"i\""));
 	}
 
 	@Test
@@ -146,8 +132,8 @@ public class HasElementsMatcherTest {
 		String html = "<div><b>Hello World</b></div>";
 
 		IsHtmlMatcher matcher = isHtmlMatching(allOf(
-				hasElements("i"),
-				hasElements("b")
+				hasElement("i"),
+				hasElement("b")
 		));
 		StringDescription expectedDescription = new StringDescription();
 		matcher.describeTo(expectedDescription);
@@ -157,16 +143,16 @@ public class HasElementsMatcherTest {
 
 		assertThat(matches, is(false));
 		assertThat(expectedDescription.toString(), is("a parsable HTML-Document that " +
-				"(has elements matching \"i\" and has elements matching \"b\")"));
+				"(has an element matching \"i\" and has an element matching \"b\")"));
 
 		assertThat(mismatchDescription.toString(), is("a parsable HTML-Document " +
-				"that has elements matching \"i\" did not have elements matching \"i\""));
+				"that has an element matching \"i\" did not have an element matching \"i\""));
 	}
 
 	@Test
-	public void describesSubMatcherRejectionCorrectly() {
+	public void describesMultipleMatchRejectionCorrectly() {
 		String html = "<div><b>Hello</b> <b>World</b></div>";
-		IsHtmlMatcher matcher = isHtmlMatching(hasElements("b", hasSize(3)));
+		IsHtmlMatcher matcher = isHtmlMatching(hasElement("b"));
 
 		StringDescription expectedDescription = new StringDescription();
 		matcher.describeTo(expectedDescription);
@@ -176,10 +162,9 @@ public class HasElementsMatcherTest {
 
 		assertThat(matches, is(false));
 		assertThat(expectedDescription.toString(), is("a parsable HTML-Document that " +
-				"has elements matching \"b\" that " +
-				"a collection with size <3>")); // TODO make text nicer
+				"has an element matching \"b\""));
 
-		assertThat(mismatchDescription.toString(), is("a parsable HTML-Document that did have elements that " +
-				"collection size was <2>"));
+		assertThat(mismatchDescription.toString(), is("a parsable HTML-Document that did have (<2>) elements " +
+				"while expecting only 1 matching \"b\""));
 	}
 }
