@@ -167,5 +167,4 @@ public class HasElementMatcherTest {
 		assertThat(mismatchDescription.toString(), is("a parsable HTML-Document that did have (<2>) elements " +
 				"while expecting only 1 matching \"b\""));
 	}
-
 }

@@ -9,7 +9,6 @@ import org.hamcrest.TypeSafeDiagnosingMatcher;
 import org.jsoup.nodes.Element;
 
 public class HasClassMatcher extends TypeSafeDiagnosingMatcher<Element> {
-
 	private final Matcher<String> classMatcher;
 	private final Matcher<Iterable<? extends String>> classesMatcher;
 
