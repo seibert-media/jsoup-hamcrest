@@ -1,6 +1,6 @@
-package net.seibermedia.jsouphamcrest;
+package net.seibertmedia.jsouphamcrest;
 
-import static net.seibermedia.jsouphamcrest.IsHtmlMatcher.isHtmlMatching;
+import static net.seibertmedia.jsouphamcrest.IsHtmlMatcher.isHtmlMatching;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.any;
 

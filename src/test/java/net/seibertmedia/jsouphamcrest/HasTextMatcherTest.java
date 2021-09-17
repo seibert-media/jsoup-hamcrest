@@ -1,9 +1,9 @@
-package net.seibermedia.jsouphamcrest;
+package net.seibertmedia.jsouphamcrest;
 
-import static net.seibermedia.jsouphamcrest.HasElementMatcher.hasElement;
-import static net.seibermedia.jsouphamcrest.HasTextMatcher.hasOwnText;
-import static net.seibermedia.jsouphamcrest.HasTextMatcher.hasText;
-import static net.seibermedia.jsouphamcrest.IsHtmlMatcher.isHtmlMatching;
+import static net.seibertmedia.jsouphamcrest.HasElementMatcher.hasElement;
+import static net.seibertmedia.jsouphamcrest.HasTextMatcher.hasOwnText;
+import static net.seibertmedia.jsouphamcrest.HasTextMatcher.hasText;
+import static net.seibertmedia.jsouphamcrest.IsHtmlMatcher.isHtmlMatching;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.is;
